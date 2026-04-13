@@ -1,11 +1,11 @@
-﻿name: AWS Staging Provision
+name: AWS Staging Provision
 
 on:
   workflow_dispatch:
 
 permissions:
   id-token: write
-  contents: read    
+  contents: read
 
 jobs:
   provision:
@@ -30,16 +30,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        shell: cmd
-        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging init -input=false
+        run: terraform -chdir=envs/staging init -input=false
 
       - name: Terraform Plan
-        shell: cmd
-        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging plan -input=false -var-file=terraform.tfvars
+        run: terraform -chdir=envs/staging plan -input=false -var-file=terraform.tfvars
 
       - name: Terraform Apply
-        shell: cmd
-        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging apply -auto-approve -input=false -var-file=terraform.tfvars
-
-
-
+        run: terraform -chdir=envs/staging apply -auto-approve -input=false -var-file=terraform.tfvars
