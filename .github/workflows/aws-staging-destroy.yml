@@ -1,12 +1,37 @@
-name: AWS Staging Destroy
+﻿name: AWS Staging Destroy
 
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  destroy:
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - aws-terraform
+      - staging
 
     steps:
-      - name: Destroy test message
-        run: echo "Destroy workflow registered successfully"
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::385074783484:role/leninkart-terraform-github-oidc-role
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        shell: cmd
+        run: "terraform" -chdir=envs/staging init -input=false
+
+      - name: Terraform Destroy
+        shell: cmd
+        run: "terraform" -chdir=envs/staging destroy -auto-approve -input=false -var-file=terraform.tfvars
