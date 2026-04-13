@@ -1,12 +1,42 @@
-name: AWS Staging Provision
+﻿name: AWS Staging Provision
 
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  provision:
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
+      - leninkart
+      - local
+      - dev
 
     steps:
-      - name: Print message
-        run: echo "Terraform workflow dispatch is working"
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::385074783484:role/leninkart-terraform-github-oidc-role
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        shell: cmd
+        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging init -input=false
+
+      - name: Terraform Plan
+        shell: cmd
+        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging plan -input=false -var-file=terraform.tfvars
+
+      - name: Terraform Apply
+        shell: cmd
+        run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging apply -auto-approve -input=false -var-file=terraform.tfvars
