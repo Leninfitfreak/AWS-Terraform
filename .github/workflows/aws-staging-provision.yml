@@ -40,3 +40,6 @@ jobs:
       - name: Terraform Apply
         shell: cmd
         run: "%TERRAFORM_CLI_PATH%\terraform.exe" -chdir=envs/staging apply -auto-approve -input=false -var-file=terraform.tfvars
+
+
+
