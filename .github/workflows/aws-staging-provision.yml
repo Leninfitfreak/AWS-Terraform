@@ -1,0 +1,12 @@
+name: AWS Staging Provision
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "Terraform workflow dispatch is working"
