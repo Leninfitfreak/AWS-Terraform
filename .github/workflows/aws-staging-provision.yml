@@ -30,7 +30,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=envs/staging init -reconfigure -input=false
+        run: terraform -chdir=envs/staging init -input=false
 
       - name: Terraform Plan
         run: terraform -chdir=envs/staging plan -input=false -var-file=terraform.tfvars
