@@ -296,6 +296,7 @@ resource "aws_eks_node_group" "staging" {
   node_group_name = "leninkart-staging-ng"
   node_role_arn   = local.eks_node_role_arn
   subnet_ids      = [local.public_subnet_id, local.public_subnet_2_id]
+  ami_type        = "AL2023_x86_64_STANDARD"
   instance_types  = [var.eks_node_instance_type]
 
   scaling_config {
