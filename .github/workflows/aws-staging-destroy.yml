@@ -29,7 +29,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=envs/staging init -input=false
+        run: terraform -chdir=envs/staging init -reconfigure -input=false
 
       - name: Terraform Destroy
         run: terraform -chdir=envs/staging destroy -auto-approve -input=false -var-file=terraform.tfvars

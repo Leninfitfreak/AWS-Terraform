@@ -1,5 +1,12 @@
 terraform {
   required_version = ">= 1.6.0"
+  backend "s3" {
+    bucket       = "leninkart-tfstate-385074783484-us-east-1"
+    key          = "staging/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
